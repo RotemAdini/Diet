@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MyDiet Pro - V10</title>
+    <title>MyDiet Pro - V10.3</title>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,7 +28,7 @@
 
         .macro-chips { display: flex; gap: 8px; margin-top: 14px; }
         .macro-chip { flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); padding: 8px 6px; border-radius: 12px; font-size: 11px; text-align: center; }
-        .macro-chip strong { display: block; font-size: 15px; font-weight: 900; margin-top: 2px; }
+        .macro-chip strong { display: block; font-size: 13px; font-weight: 900; margin-top: 2px; }
 
         /* MEAL CARDS */
         .meal-card { background: var(--card); border-radius: var(--radius); margin-bottom: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); overflow: hidden; }
@@ -56,30 +56,33 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(10,15,40,0.6); z-index: 1000; align-items: flex-end; backdrop-filter: blur(5px); }
         .modal-box { background: white; width: 100%; max-height: 88%; border-radius: 24px 24px 0 0; padding: 20px; overflow-y: auto; position: relative; }
         .close-btn { position: absolute; left: 16px; top: 16px; background: #f0f2f8; width: 32px; height: 32px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+        
+        /* LOG STYLES */
+        .log-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 12px; margin-bottom: 10px; color: white; }
+        .log-item.success { background: var(--c-color); }
+        .log-item.fail { background: var(--danger); }
+        .log-date { font-weight: 900; font-size: 14px; }
+        .log-val { font-size: 13px; font-weight: 400; }
+
+        .fab-group { position: fixed; bottom: 22px; left: 16px; display: flex; gap: 10px; z-index: 90; }
+        .fab { background: var(--primary); color: white; border: none; padding: 14px 18px; border-radius: 50px; font-weight: 700; box-shadow: 0 6px 20px rgba(0,0,0,0.2); cursor: pointer; font-family: inherit; }
+        .fab-heart { background: #ff4757; }
+
+        .reset-btn { display: block; text-align: center; color: var(--sub); background: none; border: none; text-decoration: underline; margin-top: 10px; width: 100%; cursor: pointer; font-family: inherit; }
         .search-input { width: 100%; padding: 12px; border: 1.5px solid #e8eaf0; border-radius: 12px; margin-bottom: 14px; outline: none; font-family: inherit; }
+        .form-input { width: 100%; padding: 11px; border: 1.5px solid #e8eaf0; border-radius: 11px; margin-bottom: 8px; font-family: inherit; font-size: 14px; }
 
-        /* QTY MODAL */
-        .qty-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-        .qty-btn { background: #f0f2f8; border: 2px solid transparent; padding: 15px 5px; border-radius: 12px; font-weight: 800; font-size: 16px; color: var(--primary); cursor: pointer; }
-        .qty-btn.active { border-color: var(--primary-light); background: #eef2ff; }
-
-        /* ACCORDION */
         .cat-group { margin-bottom: 10px; border-radius: 12px; overflow: hidden; border: 1px solid #edf0fb; }
         .cat-header { display: flex; justify-content: space-between; align-items: center; padding: 14px; font-size: 15px; font-weight: 800; color: var(--primary); cursor: pointer; }
-        .cat-header::after { content: '▾'; transition: transform 0.3s; font-size: 18px; }
-        .cat-group.open .cat-header::after { transform: rotate(180deg); }
         .cat-content { display: none; padding: 5px; background: #fff; }
         .cat-group.open .cat-content { display: block; }
-        
         .header-p { background: #f0f8ff; border-right: 5px solid var(--p-color); }
         .header-c { background: #f0fff6; border-right: 5px solid var(--c-color); }
         .header-f { background: #fffaf0; border-right: 5px solid var(--f-color); }
-
         .food-option { display: flex; justify-content: space-between; background: #f7f8fc; padding: 12px; border-radius: 10px; margin-bottom: 5px; cursor: pointer; font-size: 14px; align-items: center; }
-        
-        .fab { position: fixed; bottom: 22px; left: 16px; background: var(--primary); color: white; border: none; padding: 14px 22px; border-radius: 50px; font-weight: 700; box-shadow: 0 6px 20px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; font-family: inherit; }
-        .reset-btn { display: block; text-align: center; color: var(--sub); background: none; border: none; text-decoration: underline; margin-top: 10px; width: 100%; cursor: pointer; font-family: inherit; }
-        .form-input { width: 100%; padding: 11px; border: 1.5px solid #e8eaf0; border-radius: 11px; margin-bottom: 8px; font-family: inherit; font-size: 14px; }
+        .qty-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .qty-btn { background: #f0f2f8; border: 2px solid transparent; padding: 15px 5px; border-radius: 12px; font-weight: 800; font-size: 16px; color: var(--primary); cursor: pointer; }
+        .qty-btn.active { border-color: var(--primary-light); background: #eef2ff; }
     </style>
 </head>
 <body>
@@ -88,23 +91,26 @@
     <div class="header-top">
         <div>
             <div class="header-title">MyDiet Pro 🥗</div>
-            <div class="header-sub">יעד: 10.5P | 10.3C | 8.0F</div>
+            <div class="header-sub">יעד יומי: 1355 קלוריות</div>
         </div>
         <div class="donut-wrap" id="donut-bg">
             <div class="donut-inner"></div>
-            <div class="donut-text" id="donut-text">0%<span>נותר: 1400</span></div>
+            <div class="donut-text" id="donut-text">0%<span>נותר: 1355</span></div>
         </div>
     </div>
     <div class="macro-chips">
-        <div class="macro-chip">חלבון<strong id="sum-p" style="color:var(--p-color)">0</strong></div>
-        <div class="macro-chip">פחמימה<strong id="sum-c" style="color:var(--c-color)">0</strong></div>
-        <div class="macro-chip">שומן<strong id="sum-f" style="color:var(--f-color)">0</strong></div>
+        <div class="macro-chip">חלבון<strong id="sum-p" style="color:var(--p-color)">0 / 0</strong></div>
+        <div class="macro-chip">פחמימה<strong id="sum-c" style="color:var(--c-color)">0 / 0</strong></div>
+        <div class="macro-chip">שומן<strong id="sum-f" style="color:var(--f-color)">0 / 0</strong></div>
     </div>
 </div>
 
 <div id="meals-list"></div>
 
-<button class="fab" onclick="openManager()">⚙️ ניהול מאגר</button>
+<div class="fab-group">
+    <button class="fab" onclick="openManager()">⚙️</button>
+    <button class="fab fab-heart" onclick="openLog()">❤️</button>
+</div>
 <button class="reset-btn" onclick="resetDay()">איפוס יום</button>
 
 <div id="modal-select" class="modal" onclick="if(event.target==this)closeModals()">
@@ -149,150 +155,105 @@
     </div>
 </div>
 
+<div id="modal-log" class="modal" onclick="if(event.target==this)closeModals()">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeModals()">✕</button>
+        <p style="font-weight:900; font-size:18px; margin-bottom:15px;">יומן הצלחות ❤️</p>
+        <div id="log-container"></div>
+        <button class="reset-btn" onclick="clearLog()" style="color:var(--danger); margin-top:20px;">מחיקת היסטוריה</button>
+    </div>
+</div>
+
 <script>
-    const initialDb = [
-        // מוצרי חלב
-        { name: 'ביצה', p: 0.6, c: 0, f: 1, cal: 83 },
-        { name: '2 ביצים', p: 1.2, c: 0, f: 2, cal: 166 },
-        { name: '100 גרם קוטג’', p: 1.1, c: 0, f: 0.9, cal: 100 },
-        { name: 'מעדן חלבון', p: 2, c: 0.5, f: 0, cal: 120 },
-        { name: 'בולגרית 100 גרם', p: 1.15, c: 0.2, f: 1, cal: 103 },
-        { name: '50 גרם בולגרית', p: 0.6, c: 0.1, f: 0.5, cal: 52 },
-        { name: 'גבנ"צ 9% (פרוסה)', p: 0.8, c: 0, f: 0.5, cal: 55 },
-        { name: 'גבינה לבנה 100 גרם', p: 1, c: 0, f: 1, cal: 100 },
-        // דגים ובשר
-        { name: 'דג אמנון 100 גרם', p: 2, c: 0, f: 0.4, cal: 96 },
-        { name: '150 גרם דג אמנון', p: 3, c: 0, f: 0.6, cal: 144 },
-        { name: 'סלמון 100 גרם', p: 2.5, c: 0, f: 2, cal: 200 },
-        { name: 'סלמון 140 גרם', p: 3.5, c: 0, f: 2.8, cal: 280 },
-        { name: 'חזה עוף 100 גרם', p: 2.3, c: 0, f: 0.5, cal: 120 },
-        { name: 'חזה עוף 120 גרם', p: 2.8, c: 0, f: 0.6, cal: 144 },
-        { name: '165 גרם חזה עוף', p: 3.8, c: 0, f: 0.9, cal: 198 },
-        { name: '190 גרם חזה עוף', p: 4.4, c: 0, f: 1, cal: 228 },
-        { name: 'טונה במים', p: 2.2, c: 0, f: 0, cal: 94 },
-        { name: '7 קציצות עוף', p: 3.5, c: 1, f: 1, cal: 300 },
-        { name: '2.5 חתיכות עראייס', p: 3.5, c: 2, f: 1, cal: 400 },
-        { name: '7 קציצות ירוקות', p: 3.5, c: 1, f: 1, cal: 300 },
-        // פחמימות
-        { name: '20 גרם פסטה (לפני)', p: 0, c: 1, f: 0, cal: 70 },
-        { name: '230 גרם תפוח אדמה', p: 0, c: 3, f: 0, cal: 200 },
-        { name: '20 גרם קורנפלקס', p: 0, c: 1, f: 0, cal: 75 },
-        { name: '2 פרוסות לחם חלי', p: 0, c: 1, f: 0, cal: 70 },
-        { name: 'אטריות אודון (שקית)', p: 0, c: 4, f: 0, cal: 240 },
-        { name: 'פס קינדר בואנו', p: 0, c: 0.75, f: 1, cal: 120 },
-        { name: '2 פסי קינדר בואנו', p: 0, c: 1.5, f: 2, cal: 240 },
-        { name: '2 פרוסות לחם חלב', p: 0, c: 2, f: 0, cal: 150 },
-        // שומן
-        { name: 'אבוקדו 35 גרם', p: 0, c: 0, f: 1, cal: 50 },
-        { name: 'מיני מגנום', p: 0, c: 1, f: 2, cal: 150 },
-        { name: '10 זיתים', p: 0, c: 0, f: 1, cal: 45 },
-        // שונות
-        { name: 'עוגת גבינה (תחליף)', p: 1, c: 0.5, f: 1, cal: 180 },
-        { name: '5 קציצות זוקיני', p: 1, c: 0.5, f: 1, cal: 160 },
-        { name: 'נשנושי גבינה', p: 1, c: 1, f: 1, cal: 190 },
-        { name: '15 גרם נוטלה', p: 0, c: 0.5, f: 1, cal: 80 },
-        { name: '3 בורקסי דפי אורז', p: 2, c: 2, f: 1, cal: 280 },
-        { name: 'פנקייק חלבון', p: 3.5, c: 4, f: 1, cal: 450 },
-        { name: 'חטיף חלבון', p: 2, c: 1, f: 1, cal: 210 },
-        { name: 'חצי חטיף חלבון', p: 1, c: 0.5, f: 0.5, cal: 105 }
-    ];
-
+    const initialDb = [{ name: 'ביצה', p: 0.6, c: 0, f: 1, cal: 83 }, { name: '100 גרם קוטג’', p: 1.1, c: 0, f: 0.9, cal: 100 }, { name: 'חזה עוף 100 גרם', p: 2.3, c: 0, f: 0.5, cal: 120 }, { name: '2 פרוסות לחם חלי', p: 0, c: 1, f: 0, cal: 70 }];
+    const mealGoals = [{ id: 'm1', name: 'ארוחת בוקר', p: 2, c: 1, f: 0 }, { id: 'm2', name: 'צהריים', p: 4, c: 3, f: 1 }, { id: 'm3', name: 'ביניים 1', p: 0, c: 2, f: 0 }, { id: 'm4', name: 'ערב', p: 3.5, c: 2, f: 4 }, { id: 'm5', name: 'ביניים 2', p: 1, c: 1.5, f: 1 }, { id: 'm6', name: 'לילה', p: 0, c: 1, f: 1 }];
+    
     let foodDb = JSON.parse(localStorage.getItem('my_diet_v10_db')) || initialDb;
-    const mealGoals = [
-        { id: 'm1', name: 'ארוחת בוקר', p: 1.5, c: 1, f: 1 },
-        { id: 'm2', name: 'צהריים', p: 3, c: 3, f: 2 },
-        { id: 'm3', name: 'ביניים 1', p: 0.5, c: 2, f: 0 },
-        { id: 'm4', name: 'ערב', p: 3, c: 2, f: 3 },
-        { id: 'm5', name: 'ביניים 2', p: 1, c: 1.3, f: 1 },
-        { id: 'm6', name: 'לילה', p: 1.5, c: 1, f: 1 }
-    ];
+    let state = JSON.parse(localStorage.getItem('my_diet_v10_state')) || { eaten: {m1:[],m2:[],m3:[],m4:[],m5:[],m6:[]}, completed: {m1:false,m2:false,m3:false,m4:false,m5:false,m6:false}, openCats: {p:true,c:false,f:false} };
+    let historyLog = JSON.parse(localStorage.getItem('my_diet_v10_log')) || [];
 
-    let state = JSON.parse(localStorage.getItem('my_diet_v10_state')) || {
-        eaten: { m1:[], m2:[], m3:[], m4:[], m5:[], m6:[] },
-        completed: { m1:false, m2:false, m3:false, m4:false, m5:false, m6:false },
-        openCats: { p: true, c: false, f: false } 
-    };
-
-    let tempFood = null, activeMealId = '';
+    let tempFood = null, activeMealId = '', lastTotalCal = 0;
 
     function calculate() {
-        let carry = { p:0, c:0, f:0 };
-        let totals = { p:0, c:0, f:0, cal:0 };
+        let carry = { p: 0, c: 0, f: 0 }, totals = { p: 0, c: 0, f: 0, cal: 0 }, baseGoals = { p: 0, c: 0, f: 0 };
+        mealGoals.forEach(g => { baseGoals.p += g.p; baseGoals.c += g.c; baseGoals.f += g.f; });
         const container = document.getElementById('meals-list');
         container.innerHTML = '';
 
-        mealGoals.forEach(goal => {
-            let actual = { p:0, c:0, f:0, cal:0 };
-            state.eaten[goal.id].forEach(i => {
-                actual.p += i.p; actual.c += i.c; actual.f += i.f; actual.cal += i.cal;
-            });
+        mealGoals.forEach((goal) => {
+            let actual = { p: 0, c: 0, f: 0, cal: 0 };
+            state.eaten[goal.id].forEach(i => { actual.p += i.p; actual.c += i.c; actual.f += i.f; actual.cal += i.cal; });
             let target = { p: Math.max(0, goal.p + carry.p), c: Math.max(0, goal.c + carry.c), f: Math.max(0, goal.f + carry.f) };
             const isDone = state.completed[goal.id];
 
             container.innerHTML += `
                 <div class="meal-card ${isDone ? 'done' : ''}">
                     <div class="meal-inner">
-                        <div class="meal-header">
-                            <span class="meal-name">${goal.name}</span>
-                            <span class="meal-badge">${isDone ? '✅' : Math.round(actual.cal) + ' קל׳'}</span>
-                        </div>
+                        <div class="meal-header"><span class="meal-name">${goal.name}</span><span class="meal-badge">${isDone ? '✅' : Math.round(actual.cal) + ' קל׳'}</span></div>
                         ${drawBar('חלבון', actual.p, target.p, 'var(--p-color)')}
                         ${drawBar('פחמימה', actual.c, target.c, 'var(--c-color)')}
                         ${drawBar('שומן', actual.f, target.f, 'var(--f-color)')}
                         <div style="margin-top:8px">${state.eaten[goal.id].map((item, idx) => `
-                            <div class="food-item">
-                                <span><strong>${item.name}</strong> <small>(x${item.qty})</small></span>
-                                <div>${Math.round(item.cal)} קל' <span class="remove-btn" onclick="removeItem('${goal.id}', ${idx})">✕</span></div>
-                            </div>`).join('')}</div>
-                        <div class="actions">
-                            <button class="btn-add" onclick="openSelect('${goal.id}')">➕</button>
-                            <button class="btn-done ${isDone ? 'active' : ''}" onclick="toggleDone('${goal.id}')">${isDone ? 'בוצע' : 'סיום'}</button>
-                        </div>
+                            <div class="food-item"><span><strong>${item.name}</strong> <small>(x${item.qty})</small></span><div>${Math.round(item.cal)} קל' <span class="remove-btn" onclick="removeItem('${goal.id}', ${idx})">✕</span></div></div>`).join('')}</div>
+                        <div class="actions"><button class="btn-add" onclick="openSelect('${goal.id}')">➕</button><button class="btn-done ${isDone ? 'active' : ''}" onclick="toggleDone('${goal.id}')">${isDone ? 'בוצע' : 'סיום'}</button></div>
                     </div>
                 </div>`;
-            if (isDone) carry = { p: target.p - actual.p, c: target.c - actual.c, f: target.f - actual.f };
+            if (isDone) carry = { p: target.p - actual.p, c: target.c - actual.c, f: target.f - actual.f }; else carry = { p: 0, c: 0, f: 0 };
             totals.p += actual.p; totals.c += actual.c; totals.f += actual.f; totals.cal += actual.cal;
         });
 
-        document.getElementById('sum-p').innerText = totals.p.toFixed(1);
-        document.getElementById('sum-c').innerText = totals.c.toFixed(1);
-        document.getElementById('sum-f').innerText = totals.f.toFixed(1);
+        document.getElementById('sum-p').innerText = `${totals.p.toFixed(1)} / ${baseGoals.p.toFixed(1)}`;
+        document.getElementById('sum-c').innerText = `${totals.c.toFixed(1)} / ${baseGoals.c.toFixed(1)}`;
+        document.getElementById('sum-f').innerText = `${totals.f.toFixed(1)} / ${baseGoals.f.toFixed(1)}`;
 
-        const progress = Math.min(100, (totals.cal / 1400) * 100);
+        lastTotalCal = totals.cal;
+        const progress = Math.min(100, (totals.cal / 1355) * 100);
         document.getElementById('donut-bg').style.background = `conic-gradient(#fff ${progress * 3.6}deg, rgba(255,255,255,0.15) 0deg)`;
-        document.getElementById('donut-text').innerHTML = `${Math.round(progress)}%<span>נותר: ${Math.max(0, 1400 - Math.round(totals.cal))}</span>`;
+        document.getElementById('donut-text').innerHTML = `${Math.round(progress)}%<span>נותר: ${Math.max(0, 1355 - Math.round(totals.cal))}</span>`;
         localStorage.setItem('my_diet_v10_state', JSON.stringify(state));
         localStorage.setItem('my_diet_v10_db', JSON.stringify(foodDb));
     }
 
     function drawBar(l, v, t, c) {
         const pct = t > 0 ? Math.min(100, (v / t) * 100) : (v > 0 ? 100 : 0);
-        return `<div class="bar-row">
-            <div class="bar-labels"><span>${l}</span><span>${v.toFixed(1)}/${t.toFixed(1)}</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${pct > 105 ? 'var(--danger)' : c}"></div></div>
-        </div>`;
+        return `<div class="bar-row"><div class="bar-labels"><span>${l}</span><span>${v.toFixed(1)}/${t.toFixed(1)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${pct > 105 ? 'var(--danger)' : c}"></div></div></div>`;
     }
 
+    function resetDay() {
+        if(confirm('לשמור את היום ביומן לפני האיפוס?')) {
+            const now = new Date();
+            const dateStr = `${now.getDate()}/${now.getMonth()+1}`;
+            const success = lastTotalCal <= 1360; 
+            historyLog.unshift({ date: dateStr, cal: Math.round(lastTotalCal), success });
+            localStorage.setItem('my_diet_v10_log', JSON.stringify(historyLog));
+        }
+        if(confirm('לאפס הכל?')) {
+            state.eaten = {m1:[],m2:[],m3:[],m4:[],m5:[],m6:[]};
+            state.completed = {m1:false,m2:false,m3:false,m4:false,m5:false,m6:false};
+            calculate();
+        }
+    }
+
+    function openLog() {
+        const container = document.getElementById('log-container');
+        container.innerHTML = historyLog.length ? historyLog.map(item => `
+            <div class="log-item ${item.success ? 'success' : 'fail'}">
+                <span class="log-date">${item.date}</span>
+                <span class="log-val">${item.cal} קלוריות (${item.success ? 'עמדת ביעד ✓' : 'חריגה ✕'})</span>
+            </div>`).join('') : '<p style="text-align:center; color:var(--sub)">אין עדיין ימים מתועדים</p>';
+        document.getElementById('modal-log').style.display = 'flex';
+    }
+
+    function clearLog() { if(confirm('למחוק היסטוריה?')) { historyLog = []; localStorage.setItem('my_diet_v10_log', '[]'); openLog(); } }
+
     function generateAccordionHtml(isManageMode, searchTerm = '') {
-        const cats = [
-            { id: 'p', label: '💪 חלבון', check: f => f.p >= 0.1, cls: 'header-p' },
-            { id: 'c', label: '🍞 פחמימה', check: f => f.c >= 0.1, cls: 'header-c' },
-            { id: 'f', label: '🥑 שומן', check: f => f.f >= 0.1, cls: 'header-f' }
-        ];
+        const cats = [{ id: 'p', label: '💪 חלבון', check: f => f.p >= 0.1, cls: 'header-p' }, { id: 'c', label: '🍞 פחמימה', check: f => f.c >= 0.1, cls: 'header-c' }, { id: 'f', label: '🥑 שומן', check: f => f.f >= 0.1, cls: 'header-f' }];
         let html = '';
         cats.forEach(cat => {
             const items = foodDb.filter(f => cat.check(f) && f.name.toLowerCase().includes(searchTerm.toLowerCase()));
             if (items.length > 0) {
                 const isOpen = searchTerm.length > 0 || state.openCats[cat.id];
-                html += `
-                    <div class="cat-group ${isOpen ? 'open' : ''}">
-                        <div class="cat-header ${cat.cls}" onclick="toggleCat('${cat.id}')">${cat.label}</div>
-                        <div class="cat-content">${items.map(f => `
-                            <div class="food-option" onclick="${isManageMode ? `loadIntoEditor('${f.name}')` : `askQty('${f.name}')`}">
-                                <span><strong>${f.name}</strong> <small>(${f.cal} קל')</small></span>
-                                ${isManageMode ? `<span class="remove-btn" onclick="event.stopPropagation(); deleteFromDb('${f.name}')">✕</span>` : ''}
-                            </div>`).join('')}</div>
-                    </div>`;
+                html += `<div class="cat-group ${isOpen ? 'open' : ''}"><div class="cat-header ${cat.cls}" onclick="toggleCat('${cat.id}')">${cat.label}</div><div class="cat-content">${items.map(f => `<div class="food-option" onclick="${isManageMode ? `loadIntoEditor('${f.name}')` : `askQty('${f.name}')`}"><span><strong>${f.name}</strong> <small>(${f.cal} קל')</small></span>${isManageMode ? `<span class="remove-btn" onclick="event.stopPropagation(); deleteFromDb('${f.name}')">✕</span>` : ''}</div>`).join('')}</div></div>`;
             }
         });
         return html;
@@ -303,63 +264,20 @@
         if(document.getElementById('modal-select').style.display === 'flex') renderFoodOptions();
         if(document.getElementById('modal-manage').style.display === 'flex') renderManageDb();
     }
-
     function openSelect(id) { activeMealId = id; document.getElementById('modal-select').style.display = 'flex'; renderFoodOptions(); }
     function renderFoodOptions() { document.getElementById('food-options-container').innerHTML = generateAccordionHtml(false, document.getElementById('search-food').value); }
     function openManager() { document.getElementById('modal-manage').style.display = 'flex'; renderManageDb(); }
     function renderManageDb() { document.getElementById('manage-database-container').innerHTML = generateAccordionHtml(true); }
-
-    function loadIntoEditor(name) {
-        const f = foodDb.find(item => item.name === name);
-        if(!f) return;
-        document.getElementById('new-name').value = f.name;
-        document.getElementById('new-p').value = f.p;
-        document.getElementById('new-c').value = f.c;
-        document.getElementById('new-f').value = f.f;
-        document.getElementById('new-cal').value = f.cal;
-        document.getElementById('manage-box').scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function saveFood() {
-        const name = document.getElementById('new-name').value.trim();
-        if(!name) return;
-        const newData = { name, p: parseFloat(document.getElementById('new-p').value) || 0, c: parseFloat(document.getElementById('new-c').value) || 0, f: parseFloat(document.getElementById('new-f').value) || 0, cal: parseFloat(document.getElementById('new-cal').value) || 0 };
-        const existingIdx = foodDb.findIndex(f => f.name === name);
-        if(existingIdx > -1) foodDb[existingIdx] = newData; else foodDb.push(newData);
-        calculate(); renderManageDb();
-        ['new-name','new-p','new-c','new-f','new-cal'].forEach(id => document.getElementById(id).value = '');
-    }
-
+    function loadIntoEditor(name) { const f = foodDb.find(item => item.name === name); if(!f) return; document.getElementById('new-name').value = f.name; document.getElementById('new-p').value = f.p; document.getElementById('new-c').value = f.c; document.getElementById('new-f').value = f.f; document.getElementById('new-cal').value = f.cal; document.getElementById('manage-box').scrollTo({ top: 0, behavior: 'smooth' }); }
+    function saveFood() { const name = document.getElementById('new-name').value.trim(); if(!name) return; const newData = { name, p: parseFloat(document.getElementById('new-p').value) || 0, c: parseFloat(document.getElementById('new-c').value) || 0, f: parseFloat(document.getElementById('new-f').value) || 0, cal: parseFloat(document.getElementById('new-cal').value) || 0 }; const existingIdx = foodDb.findIndex(f => f.name === name); if(existingIdx > -1) foodDb[existingIdx] = newData; else foodDb.push(newData); calculate(); renderManageDb(); ['new-name','new-p','new-c','new-f','new-cal'].forEach(id => document.getElementById(id).value = ''); }
     function deleteFromDb(name) { if(confirm(`למחוק?`)) { foodDb = foodDb.filter(f => f.name !== name); calculate(); renderManageDb(); } }
-
-    function askQty(name) { 
-        tempFood = foodDb.find(f => f.name === name); 
-        document.getElementById('qty-food-name').innerText = name; 
-        setQuickQty(1);
-        document.getElementById('modal-qty').style.display = 'flex'; 
-    }
-
-    function setQuickQty(val) {
-        document.getElementById('custom-qty').value = val;
-        document.querySelectorAll('.qty-btn').forEach(btn => btn.classList.toggle('active', parseFloat(btn.innerText) === val));
-    }
-
-    function confirmAdd() {
-        const qty = parseFloat(document.getElementById('custom-qty').value) || 1;
-        state.eaten[activeMealId].push({ name: tempFood.name, qty, p: tempFood.p * qty, c: tempFood.c * qty, f: tempFood.f * qty, cal: tempFood.cal * qty });
-        closeModals(); calculate();
-    }
-
+    function askQty(name) { tempFood = foodDb.find(f => f.name === name); document.getElementById('qty-food-name').innerText = name; setQuickQty(1); document.getElementById('modal-qty').style.display = 'flex'; }
+    function setQuickQty(val) { document.getElementById('custom-qty').value = val; document.querySelectorAll('.qty-btn').forEach(btn => btn.classList.toggle('active', parseFloat(btn.innerText) === val)); }
+    function confirmAdd() { const qty = parseFloat(document.getElementById('custom-qty').value) || 1; state.eaten[activeMealId].push({ name: tempFood.name, qty, p: tempFood.p * qty, c: tempFood.c * qty, f: tempFood.f * qty, cal: tempFood.cal * qty }); closeModals(); calculate(); }
     function removeItem(mId, idx) { state.eaten[mId].splice(idx, 1); calculate(); }
     function toggleDone(id) { state.completed[id] = !state.completed[id]; calculate(); }
     function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
-    function resetDay() { if(confirm('לאפס?')) { state.eaten = {m1:[],m2:[],m3:[],m4:[],m5:[],m6:[]}; state.completed = {m1:false,m2:false,m3:false,m4:false,m5:false,m6:false}; calculate(); } }
-    
     calculate();
 </script>
 </body>
 </html>
-
-
-
-
